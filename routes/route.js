@@ -3,7 +3,7 @@ import {
   adminlogin,
   adminregister,
 } from "../controllers/admin.auth.controller.js";
-import { login, register } from "../controllers/auth.controller.js";
+import { login, register, addProfileImage, getProfileImageByUserId } from "../controllers/auth.controller.js";
 import {
   getProducts,
   getProductById,
@@ -79,6 +79,11 @@ export const router = express.Router();
 // Auth(Customer)
 router.post("/register", register);
 router.post("/login", login);
+
+// Profile Image
+router.patch("/profile-image/:userId", addProfileImage);
+router.get("/profile-image/:userId", getProfileImageByUserId);
+
 // Customar address
 router.post("/add-address/:userId", addAddress);
 router.get("/addresses/:userId", getAllAddresses);
