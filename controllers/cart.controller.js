@@ -1,14 +1,11 @@
 import Cart from "../models/cart.model.js";
 import Notification from "../models/notification.model.js";
 
-
-
 export const getCart = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    const cart = await Cart.findOne({ userId })
-      .populate("products.productId");
+    const cart = await Cart.findOne({ userId }).populate("products.productId");
 
     if (!cart) {
       return res.json({ products: [] });
@@ -31,14 +28,19 @@ export const getCart = async (req, res) => {
   }
 };
 
-
-
 export const addToCart = async (req, res) => {
   try {
     const { userId, productId } = req.body;
 
     if (!userId || !productId) {
       return res.status(400).json({ message: "Missing fields" });
+    }
+    const duplicateCheck = await Cart.findOne({
+      userId,
+      "products.productId": productId,
+    });
+    if (duplicateCheck) {
+      return res.status(400).json({ message: "Product already in cart" });
     }
 
     let cart = await Cart.findOne({ userId });
@@ -75,7 +77,6 @@ export const addToCart = async (req, res) => {
   }
 };
 
-
 export const removeFromCart = async (req, res) => {
   try {
     const { userId, productId } = req.body;
@@ -91,7 +92,7 @@ export const removeFromCart = async (req, res) => {
     }
 
     cart.products = cart.products.filter(
-      (p) => p.productId.toString() !== productId
+      (p) => p.productId.toString() !== productId,
     );
 
     await cart.save();
