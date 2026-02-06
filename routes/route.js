@@ -71,6 +71,7 @@ import {
   deleteTicket,
   getTicketByEmail,
 } from "../controllers/ticket.controller.js";
+import { getReturns, createReturn, updateReturnStatus } from "../controllers/return.controller.js";
 
 export const router = express.Router();
 
@@ -249,3 +250,9 @@ router.get(
   authorize("superadmin", "admin"),
   exportDashboardPDF,
 );
+
+
+// Returns
+router.post("/returns", createReturn);        // customer
+router.get("/returns", getReturns);           // admin
+router.patch("/returns/:id", updateReturnStatus); // admin
