@@ -15,6 +15,8 @@ const paymentSchema = new mongoose.Schema(
         },
         quantity: Number,
         price: Number,
+        color: String,
+        size: String,
       },
     ],
     address: String,
