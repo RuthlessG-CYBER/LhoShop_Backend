@@ -30,7 +30,7 @@ export const getCart = async (req, res) => {
 
 export const addToCart = async (req, res) => {
   try {
-    const { userId, productId } = req.body;
+    const { userId, productId, quantity, color, size } = req.body;
 
     if (!userId || !productId) {
       return res.status(400).json({ message: "Missing fields" });
@@ -47,7 +47,7 @@ export const addToCart = async (req, res) => {
     if (!cart) {
       cart = await Cart.create({
         userId,
-        products: [{ productId, quantity: 1 }],
+        products: [{ productId, quantity, color, size }],
       });
 
       return res.json(cart);
