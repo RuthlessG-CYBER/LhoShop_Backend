@@ -1,7 +1,6 @@
 import Return from "../models/return.model.js";
 import Payments from "../models/payment.model.js";
 
-/* CREATE RETURN REQUEST */
 export const createReturn = async (req, res) => {
   try {
     const { paymentId, reason } = req.body;
@@ -12,7 +11,6 @@ export const createReturn = async (req, res) => {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    // 🚀 prevent duplicate return
     const alreadyExists = await Return.findOne({ paymentId });
 
     if (alreadyExists) {
@@ -22,7 +20,7 @@ export const createReturn = async (req, res) => {
     }
 
     const newReturn = await Return.create({
-      paymentId: payment._id, // always use ObjectId
+      paymentId: payment._id,
       userId: payment.userId,
       reason,
     });
@@ -35,7 +33,6 @@ export const createReturn = async (req, res) => {
 
 
 
-/* GET ALL RETURNS (Admin) */
 export const getReturns = async (_, res) => {
   try {
     const returns = await Return.find()
@@ -61,7 +58,6 @@ export const getReturns = async (_, res) => {
 
 
 
-/* APPROVE / REJECT */
 export const updateReturnStatus = async (req, res) => {
   try {
     const { status } = req.body;
@@ -87,16 +83,12 @@ export const updateReturnStatus = async (req, res) => {
     ret.status = status;
     await ret.save();
 
-    /* ================= OPTIONAL BUSINESS LOGIC ================= */
-
-    // auto refund example
     if (status === "Refunded") {
       await Payments.findByIdAndUpdate(ret.paymentId, {
         status: "refunded",
       });
     }
 
-    // auto replacement example
     if (status === "Replaced") {
       await Payments.findByIdAndUpdate(ret.paymentId, {
         delivaryStatus: "Processing",

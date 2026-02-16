@@ -216,3 +216,34 @@ export const verifyPayment = async (req, res) => {
   }
 };
 
+// get all products where product type == "Beauty"
+export const getBeautyProducts = async (req, res) => {
+  try {
+    const products = await Products.find({ type: "Beauty" });
+    if (!products) {
+      return res.status(404).json({ message: "Products not found" });
+    }
+    res.status(200).json({
+      message: "Products fetched successfully",
+      products,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+}
+
+// get all products where product type == "Fashion"
+export const getFashionProducts = async (req, res) => {
+  try {
+    const products = await Products.find({ type: "Fashion" });
+    if (!products) {
+      return res.status(404).json({ message: "Products not found" });
+    }
+    res.status(200).json({
+      message: "Products fetched successfully",
+      products,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+}

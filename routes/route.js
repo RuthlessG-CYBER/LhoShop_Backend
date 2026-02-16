@@ -12,6 +12,8 @@ import {
   deleteProduct,
   createOrder,
   verifyPayment,
+  getFashionProducts,
+  getBeautyProducts
 } from "../controllers/product.controller.js";
 import {
   getCart,
@@ -253,6 +255,13 @@ router.get(
 
 
 // Returns
-router.post("/returns", createReturn);        // customer
-router.get("/returns", getReturns);           // admin
-router.patch("/returns/:id", updateReturnStatus); // admin
+router.post("/returns", createReturn);
+router.get("/returns", getReturns);
+router.patch("/returns/:id", protect, authorize("admin", "superadmin"), updateReturnStatus);
+
+
+
+
+// Promo
+router.get("/getPromo/fashion", getFashionProducts);
+router.get("/getPromo/beauty", getBeautyProducts);
