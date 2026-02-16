@@ -58,7 +58,12 @@ export const addToCart = async (req, res) => {
     if (index > -1) {
       cart.products[index].quantity += 1;
     } else {
-      cart.products.push({ productId, quantity: 1 });
+      cart.products.push({
+        productId,
+        quantity: quantity,
+        color,
+        size,
+      });
     }
 
     await cart.save();
